@@ -1833,11 +1833,11 @@
       <p style="margin-top:20px; font-size:0.9rem;">Ready to strengthen your security? Let\'s connect!</p>
     `;
 
-    supabase.from('audit_responses').insert({
-      score: avgScore,
-      assessment: assessment,
-      answers: scores
-    });
+    fetch('/api/audit-responses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ score: avgScore, assessment: assessment, answers: scores })
+    }).catch(() => {});
 
     buttonGroup.innerHTML = `
       <button class="audit-btn-next" onclick="requestConsultation()">Request Consultation</button>
@@ -1875,23 +1875,26 @@
   });
 </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const supabase = window.supabase.createClient(
-      'https://ihpvhlcbycimmglxztuf.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlocHZobGNieWNpbW1nbHh6dHVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU4MzQ4NzEsImV4cCI6MjEwMTQxMDg3MX0.bv1nuswIcd1l7XBgPtGb0MlNjTgSsz-UEuHXro2K2tc'
-    );
-
     document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = e.target;
-      const { error } = await supabase.from('contacts').insert({
-        name: form.name.value,
-        email: form.email.value,
-        phone: form.phone.value,
-        message: form.message.value
-      });
-      if (error) { alert('Something went wrong, please try again.'); return; }
+      try {
+        const res = await fetch('/api/contacts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: form.name.value,
+            email: form.email.value,
+            phone: form.phone.value,
+            message: form.message.value
+          })
+        });
+        if (!res.ok) throw new Error('request failed');
+      } catch (err) {
+        alert('Something went wrong, please try again.');
+        return;
+      }
       alert('Thank you! Your message has been sent. We will contact you soon.');
       form.reset();
     });

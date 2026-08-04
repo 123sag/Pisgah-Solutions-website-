@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pisgah Solutions — Admin Dashboard</title>
 <meta name="robots" content="noindex, nofollow">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root{
     --purple:#6b21c9;
@@ -234,15 +233,11 @@
     <p>Please enter credentials to access live records</p>
     <form id="adminLoginForm">
       <div class="login-group">
-        <label for="adminEmail">Email Address</label>
-        <input type="email" id="adminEmail" required placeholder="admin@pisgahsolutions.com">
-      </div>
-      <div class="login-group">
-        <label for="adminPassword">Password</label>
+        <label for="adminPassword">Admin Password</label>
         <input type="password" id="adminPassword" required placeholder="••••••••">
       </div>
       <button type="submit" class="login-btn">Log In</button>
-      <div id="loginError" class="login-error">Invalid login credentials.</div>
+      <div id="loginError" class="login-error">Invalid password.</div>
     </form>
   </div>
 </div>
@@ -285,70 +280,50 @@
       </tbody>
     </table>
   </div>
+
+  <div class="section-box">
+    <h2>Security Audit Responses</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Score</th>
+          <th>Assessment</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="auditBody">
+        <tr><td colspan="3" style="text-align:center; color:var(--muted);">Loading audits...</td></tr>
+      </tbody>
+    </table>
+  </div>
 </main>
 
 <script>
-  const SUPABASE_URL = 'YOUR_PROJECT_URL';     // Replace with your project URL
-  const SUPABASE_KEY = 'YOUR_ANON_PUBLIC_KEY'; // Replace with your anon key
+  const PASSWORD_KEY = 'adminDashboardPassword';
+  const POLL_INTERVAL_MS = 4000;
+  let pollTimer = null;
+  let auditCache = [];
 
-  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-  let contacts = [];
-  let audits = [];
-
-  // 1. Session Check
-  async function checkAdminSession() {
-    const { data: { session } } = await db.auth.getSession();
-    if (session) {
-      document.getElementById('loginOverlay').style.display = 'none';
-      initDashboard();
-    } else {
-      document.getElementById('loginOverlay').style.display = 'flex';
-    }
+  function getStoredPassword() {
+    return sessionStorage.getItem(PASSWORD_KEY);
   }
 
-  // 2. Login Form Handler
-  document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('adminEmail').value;
-    const password = document.getElementById('adminPassword').value;
-    const errorDiv = document.getElementById('loginError');
-
-    errorDiv.style.display = 'none';
-
-    const { data, error } = await db.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
-
-    if (error) {
-      errorDiv.textContent = error.message;
-      errorDiv.style.display = 'block';
-    } else {
-      document.getElementById('loginOverlay').style.display = 'none';
-      initDashboard();
+  async function fetchJson(path, password) {
+    const res = await fetch(path, { headers: { 'x-admin-password': password } });
+    if (!res.ok) {
+      const err = new Error('request failed');
+      err.status = res.status;
+      throw err;
     }
-  });
-
-  // 3. Logout Handler
-  async function handleLogout() {
-    await db.auth.signOut();
-    window.location.reload();
+    return res.json();
   }
 
-  // 4. Load Data & Subscriptions
-  async function initDashboard() {
-    document.getElementById('statusDot').className = 'dot live';
-    document.getElementById('statusText').textContent = 'Live Database Connected';
-
-    const { data, error } = await db.from('contacts').select('*').order('created_at', { ascending: false });
-    if (!error && data) {
-      contacts = data;
-      renderContacts();
-    }
+  function setLive(isLive) {
+    document.getElementById('statusDot').className = 'dot' + (isLive ? ' live' : '');
+    document.getElementById('statusText').textContent = isLive ? 'Live Database Connected' : 'Connection lost — retrying...';
   }
 
-  function renderContacts() {
+  function renderContacts(contacts) {
     const tbody = document.getElementById('contactBody');
     document.getElementById('contactCount').textContent = contacts.length;
 
@@ -359,16 +334,110 @@
 
     tbody.innerHTML = contacts.map(c => `
       <tr>
-        <td>${c.name || ''}</td>
-        <td>${c.email || ''}</td>
-        <td>${c.phone || ''}</td>
-        <td>${c.message || ''}</td>
-        <td>${new Date(c.created_at).toLocaleString()}</td>
+        <td>${escapeHtml(c.name)}</td>
+        <td>${escapeHtml(c.email)}</td>
+        <td>${escapeHtml(c.phone)}</td>
+        <td>${escapeHtml(c.message)}</td>
+        <td>${new Date(c.createdAt).toLocaleString()}</td>
       </tr>
     `).join('');
   }
 
-  // Execute on load
+  function renderAudits(audits) {
+    const tbody = document.getElementById('auditBody');
+    document.getElementById('auditCount').textContent = audits.length;
+
+    if (!audits.length) {
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No records found.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = audits.map(a => `
+      <tr>
+        <td>${Math.round(a.score)}%</td>
+        <td>${escapeHtml(a.assessment)}</td>
+        <td>${new Date(a.createdAt).toLocaleString()}</td>
+      </tr>
+    `).join('');
+  }
+
+  function escapeHtml(value) {
+    const div = document.createElement('div');
+    div.textContent = value ?? '';
+    return div.innerHTML;
+  }
+
+  async function pollOnce(password) {
+    const [contacts, audits] = await Promise.all([
+      fetchJson('/api/contacts', password),
+      fetchJson('/api/audit-responses', password)
+    ]);
+    renderContacts(contacts);
+    renderAudits(audits);
+    auditCache = audits;
+    setLive(true);
+  }
+
+  function startPolling(password) {
+    if (pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(() => {
+      pollOnce(password).catch((err) => {
+        setLive(false);
+        if (err.status === 401) {
+          sessionStorage.removeItem(PASSWORD_KEY);
+          clearInterval(pollTimer);
+          document.getElementById('loginOverlay').style.display = 'flex';
+        }
+      });
+    }, POLL_INTERVAL_MS);
+  }
+
+  async function initDashboard(password) {
+    document.getElementById('statusText').textContent = 'Connecting...';
+    await pollOnce(password);
+    startPolling(password);
+  }
+
+  async function checkAdminSession() {
+    const password = getStoredPassword();
+    if (!password) {
+      document.getElementById('loginOverlay').style.display = 'flex';
+      return;
+    }
+    try {
+      document.getElementById('loginOverlay').style.display = 'none';
+      await initDashboard(password);
+    } catch (err) {
+      sessionStorage.removeItem(PASSWORD_KEY);
+      document.getElementById('loginOverlay').style.display = 'flex';
+    }
+  }
+
+  document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const password = document.getElementById('adminPassword').value;
+    const errorDiv = document.getElementById('loginError');
+    errorDiv.style.display = 'none';
+
+    try {
+      await fetchJson('/api/contacts', password);
+    } catch (err) {
+      errorDiv.textContent = err.status === 401 ? 'Invalid password.' : 'Unable to reach the server. Try again.';
+      errorDiv.style.display = 'block';
+      return;
+    }
+
+    sessionStorage.setItem(PASSWORD_KEY, password);
+    document.getElementById('loginOverlay').style.display = 'none';
+    initDashboard(password);
+  });
+
+  function handleLogout() {
+    sessionStorage.removeItem(PASSWORD_KEY);
+    if (pollTimer) clearInterval(pollTimer);
+    window.location.reload();
+  }
+
   checkAdminSession();
 </script>
 
