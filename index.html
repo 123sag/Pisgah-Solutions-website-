@@ -1896,5 +1896,356 @@
       form.reset();
     });
   </script>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pisgah Solutions | Integrated Security & Facility Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple-900:#3B0F5C;
+    --purple-800:#4C1487;
+    --purple-700:#6B21A8;
+    --purple-600:#7E22CE;
+    --purple-500:#9333EA;
+    --purple-400:#A855F7;
+    --purple-300:#C084FC;
+    --pink-500:#C026D3;
+    --grad-hero:linear-gradient(120deg, #7E22CE 0%, #9333EA 45%, #C026D3 100%);
+    --ink:#20142E;
+    --ink-soft:#5B5468;
+    --bg-white:#FFFFFF;
+    --bg-soft:#F6F4FA;
+    --border-soft:#E7E1F2;
+    --gold:#F4C95D;
+    --radius:14px;
+    --shadow:0 10px 30px rgba(107,33,168,0.10);
+    --font-head:'Poppins', sans-serif;
+    --font-body:'Inter', sans-serif;
+  }
+  :root.dark-mode{
+    --ink:#F0F0F0;
+    --ink-soft:#B0B0B0;
+    --bg-white:#1A1A1A;
+    --bg-soft:#2D2D2D;
+    --border-soft:#3D3D3D;
+    --shadow:0 10px 30px rgba(0,0,0,0.3);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--font-body);
+    color:var(--ink);
+    background:var(--bg-white);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  img{max-width:100%; display:block;}
+  a{text-decoration:none; color:inherit;}
+  ul{list-style:none;}
+  .container{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  .eyebrow{
+    display:inline-block;
+    width:4px;
+    height:26px;
+    background:var(--purple-600);
+    border-radius:2px;
+    margin-bottom:14px;
+    animation: slideInLeft 0.8s ease-out;
+  }
+  h1,h2,h3,h4{
+    font-family:var(--font-head);
+    color:var(--purple-700);
+    font-weight:700;
+  }
+  .section-title{
+    font-size:clamp(1.6rem, 2.4vw, 2.1rem);
+    margin-bottom:10px;
+    animation: fadeInUp 0.8s ease-out;
+  }
+  .section-sub{
+    color:var(--ink-soft);
+    font-size:1rem;
+    max-width:620px;
+    margin-bottom:44px;
+    animation: fadeInUp 0.8s ease-out 0.1s both;
+  }
+  .section{
+    padding:88px 0;
+  }
+  .section.soft{background:var(--bg-soft);}
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:14px 28px;
+    border-radius:999px;
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:0.95rem;
+    cursor:pointer;
+    border:2px solid transparent;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+    white-space:nowrap;
+  }
+  .btn-solid{
+    background:var(--purple-600);
+    color:#fff;
+    box-shadow:0 8px 20px rgba(126,34,206,0.35);
+  }
+  .btn-solid:hover{ transform:translateY(-3px) scale(1.02); box-shadow:0 14px 32px rgba(126,34,206,0.5); }
+  .btn-outline{
+    background:transparent;
+    color:#fff;
+    border-color:rgba(255,255,255,0.7);
+  }
+  .btn-outline:hover{ background:rgba(255,255,255,0.15); transform:translateY(-3px); border-color:#fff; }
+  .btn-outline.dark{ color:var(--purple-600); border-color:var(--purple-600); }
+  .btn-outline.dark:hover{ background:var(--purple-600); color:#fff; transform:translateY(-3px); }
+
+  /* HEADER */
+  header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border-soft);
+    animation: slideInDown 0.6s ease-out;
+    transition: background-color 0.3s ease;
+  }
+  :root.dark-mode header{
+    background:rgba(26,26,26,0.95);
+  }
+  .nav-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 24px;
+    max-width:1180px;
+    margin:0 auto;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    animation: scaleIn 0.6s ease-out;
+    cursor: pointer;
+    user-select: none;
+  }
+  .logo-img{
+    height:60px;
+    width:auto;
+    display:block;
+  }
+  nav ul{
+    display:flex;
+    gap:30px;
+  }
+  nav a{
+    font-size:0.92rem;
+    font-weight:500;
+    color:var(--ink);
+    position:relative;
+    padding:6px 0;
+    transition: color 0.3s ease;
+  }
+  nav a::after{
+    content:"";
+    position:absolute;
+    left:0; bottom:0;
+    width:0%;
+    height:2px;
+    background:var(--purple-600);
+    transition:width .3s ease;
+  }
+  nav a:hover{ color: var(--purple-600); }
+  nav a:hover::after{ width:100%; }
+  .nav-cta{ display:flex; align-items:center; gap:20px; }
+  .dark-mode-toggle{
+    width:50px;
+    height:28px;
+    background:var(--border-soft);
+    border:none;
+    border-radius:999px;
+    cursor:pointer;
+    position:relative;
+    display:flex;
+    align-items:center;
+    padding:2px;
+    transition: background 0.3s ease;
+  }
+  .dark-mode-toggle:hover{
+    background:var(--purple-500);
+  }
+  .dark-mode-toggle::after{
+    content:"☀️";
+    position:absolute;
+    left:6px;
+    font-size:14px;
+    transition: all 0.3s ease;
+  }
+  :root.dark-mode .dark-mode-toggle{
+    background:var(--purple-600);
+  }
+  :root.dark-mode .dark-mode-toggle::after{
+    content:"🌙";
+    left:auto;
+    right:6px;
+  }
+  .burger{ display:none; flex-direction:column; gap:5px; cursor:pointer; }
+  .burger span{ width:24px; height:2px; background:var(--purple-700); }
+
+  /* HERO */
+  .hero{
+    background:var(--grad-hero);
+    position:relative;
+    overflow:hidden;
+    padding:90px 0 70px;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    width:520px; height:520px;
+    background:radial-gradient(circle, rgba(255,255,255,0.14), transparent 65%);
+    top:-180px; right:-120px;
+    animation: float 6s ease-in-out infinite;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:56px;
+    align-items:center;
+    position:relative;
+    z-index:2;
+  }
+  .hero h1{
+    color:#fff;
+    font-size:clamp(2.1rem, 4vw, 3.1rem);
+    line-height:1.15;
+    margin-bottom:20px;
+    animation: slideInLeft 0.8s ease-out;
+  }
+  .hero .eyebrow{ background:var(--gold); }
+  .hero p{
+    color:rgba(255,255,255,0.88);
+    font-size:1.05rem;
+    max-width:480px;
+    margin-bottom:34px;
+    animation: slideInLeft 0.8s ease-out 0.1s both;
+  }
+  .hero-actions{ display:flex; gap:16px; flex-wrap:wrap; animation: slideInLeft 0.8s ease-out 0.2s both; }
+  .hero-img{
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 30px 60px rgba(59,15,92,0.45);
+    border:6px solid rgba(255,255,255,0.25);
+    animation: slideInRight 0.8s ease-out;
+  }
+  .hero-img img{ width:100%; height:400px; object-fit:cover; transition: transform 0.4s ease; }
+  .hero-img:hover img { transform: scale(1.05); }
+
+  /* FOOTER */
+  footer{
+    background:var(--purple-900);
+    color:rgba(255,255,255,0.75);
+    padding:40px 24px 26px;
+    text-align:center;
+    font-size:0.85rem;
+  }
+</style>
+<header>
+  <div class="nav-wrap">
+    <div class="logo" id="secretLogoTrigger" title="Pisgah Solutions">
+      <img src="pisgahsolutions-logo.png" alt="Pisgah Solutions" class="logo-img">
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-cta">
+      <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode"></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow"></span>
+      <h1>Integrated Security & Facility Solutions</h1>
+      <p>Providing seamless, reliable, and technology-driven operations for your organization.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-solid">Get Started</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 Pisgah Solutions. All Rights Reserved.</p>
+</footer>
+
+<script>
+  // Secret Triple-Click Action on Logo
+  let logoClickCount = 0;
+  let logoClickTimer = null;
+
+  document.getElementById('secretLogoTrigger').addEventListener('click', function() {
+    logoClickCount++;
+    clearTimeout(logoClickTimer);
+
+    if (logoClickCount === 3) {
+      window.location.href = 'admin.html';
+      logoClickCount = 0;
+    } else {
+      logoClickTimer = setTimeout(() => {
+        logoClickCount = 0;
+      }, 1000);
+    }
+  });
+
+  // Dark Mode Toggle
+  const toggleBtn = document.getElementById('darkModeToggle');
+  toggleBtn.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark-mode');
+  });
+</script>
 </body>
 </html>
