@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pisgah Solutions — Admin Dashboard</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --purple:#6b21c9;
+    --purple-dark:#4c1a94;
+    --bg:#f4f2fb;
+    --card:#ffffff;
+    --text:#1f1a2e;
+    --muted:#6b6478;
+    --border:#e4dff5;
+    --green:#1fa96a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+  }
+  header{
+    background:var(--purple);
+    color:#fff;
+    padding:18px 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  header h1{
+    margin:0;
+    font-size:1.25rem;
+  }
+  header .status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.85rem;
+  }
+  .dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 0 0 rgba(31,169,106,0.6);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(31,169,106,0.5);}
+    70%{box-shadow:0 0 0 8px rgba(31,169,106,0);}
+    100%{box-shadow:0 0 0 0 rgba(31,169,106,0);}
+  }
+  #logoutBtn{
+    background:rgba(255,255,255,0.15);
+    border:1px solid rgba(255,255,255,0.4);
+    color:#fff;
+    padding:6px 14px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:0.85rem;
+  }
+  #logoutBtn:hover{background:rgba(255,255,255,0.25);}
+
+  main{
+    max-width:1200px;
+    margin:0 auto;
+    padding:28px;
+  }
+
+  /* Login screen */
+  #loginScreen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--bg);
+  }
+  .login-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:36px 32px;
+    width:100%;
+    max-width:360px;
+    box-shadow:0 8px 24px rgba(107,33,201,0.08);
+  }
+  .login-card h2{
+    margin:0 0 4px;
+    color:var(--purple);
+  }
+  .login-card p{
+    margin:0 0 22px;
+    color:var(--muted);
+    font-size:0.9rem;
+  }
+  .login-card input{
+    width:100%;
+    padding:11px 12px;
+    margin-bottom:12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    font-size:0.95rem;
+  }
+  .login-card button{
+    width:100%;
+    padding:12px;
+    background:var(--purple);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-weight:600;
+    cursor:pointer;
+    font-size:0.95rem;
+  }
+  .login-card button:hover{background:var(--purple-dark);}
+  #loginError{
+    color:#c0392b;
+    font-size:0.85rem;
+    margin-top:10px;
+    min-height:18px;
+  }
+
+  /* Dashboard */
+  .summary-row{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:16px;
+    margin-bottom:28px;
+  }
+  .summary-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:18px 20px;
+  }
+  .summary-card .num{
+    font-size:1.8rem;
+    font-weight:700;
+    color:var(--purple);
+  }
+  .summary-card .label{
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+
+  section{margin-bottom:36px;}
+  section h2{
+    color:var(--purple);
+    font-size:1.05rem;
+    margin-bottom:12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .badge{
+    background:var(--purple);
+    color:#fff;
+    font-size:0.7rem;
+    padding:2px 8px;
+    border-radius:10px;
+  }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    background:var(--card);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  thead th{
+    text-align:left;
+    background:#f7f4fd;
+    color:var(--purple-dark);
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    padding:12px 14px;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{
+    padding:12px 14px;
+    border-bottom:1px solid var(--border);
+    font-size:0.9rem;
+    vertical-align:top;
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr.new-row{
+    animation:highlight 2.5s ease-out;
+  }
+  @keyframes highlight{
+    0%{background:#e8ddfb;}
+    100%{background:transparent;}
+  }
+  .empty-msg{
+    text-align:center;
+    color:var(--muted);
+    padding:24px;
+    font-size:0.9rem;
+  }
+  .score-pill{
+    display:inline-block;
+    padding:3px 10px;
+    border-radius:12px;
+    font-size:0.78rem;
+    font-weight:600;
+  }
+  .score-good{background:#e3f7ea;color:var(--green);}
+  .score-mid{background:#fff4e0;color:#b8860b;}
+  .score-low{background:#fde8e8;color:#c0392b;}
+  .msg-cell{max-width:260px;white-space:pre-wrap;}
+  .time-cell{white-space:nowrap;color:var(--muted);font-size:0.82rem;}
+</style>
+</head>
+<body>
+
+<!-- ===================== LOGIN SCREEN ===================== -->
+<div id="loginScreen">
+  <div class="login-card">
+    <h2>Admin Login</h2>
+    <p>Pisgah Solutions — real-time dashboard</p>
+    <input type="email" id="loginEmail" placeholder="Email" autocomplete="username">
+    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+    <button id="loginBtn">Log In</button>
+    <div id="loginError"></div>
+  </div>
+</div>
+
+<!-- ===================== DASHBOARD ===================== -->
+<div id="dashboard" style="display:none;">
+  <header>
+    <h1>Pisgah Solutions — Admin Dashboard</h1>
+    <div class="status">
+      <span class="dot"></span>
+      <span id="statusText">Connecting…</span>
+      <button id="logoutBtn">Log Out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="summary-row">
+      <div class="summary-card">
+        <div class="num" id="contactCount">0</div>
+        <div class="label">Contact Submissions</div>
+      </div>
+      <div class="summary-card">
+        <div class="num" id="auditCount">0</div>
+        <div class="label">Audit Responses</div>
+      </div>
+      <div class="summary-card">
+        <div class="num" id="avgScore">–</div>
+        <div class="label">Average Audit Score</div>
+      </div>
+    </div>
+
+    <section>
+      <h2>Contact Submissions <span class="badge">LIVE</span></h2>
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Time</th></tr>
+        </thead>
+        <tbody id="contactsBody">
+          <tr><td colspan="5" class="empty-msg">Loading…</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Audit Responses <span class="badge">LIVE</span></h2>
+      <table>
+        <thead>
+          <tr><th>Email</th><th>Score</th><th>Assessment</th><th>Time</th></tr>
+        </thead>
+        <tbody id="auditBody">
+          <tr><td colspan="4" class="empty-msg">Loading…</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+
+<script>
+  // ====== CONFIGURE THESE ======
+  const supabase = window.supabase.createClient(
+    'YOUR_PROJECT_URL',
+    'YOUR_ANON_PUBLIC_KEY'
+  );
+  // ==============================
+
+  const loginScreen = document.getElementById('loginScreen');
+  const dashboard = document.getElementById('dashboard');
+  const loginError = document.getElementById('loginError');
+
+  let contacts = [];
+  let audits = [];
+
+  // ---------- AUTH ----------
+  document.getElementById('loginBtn').addEventListener('click', login);
+  document.getElementById('loginPassword').addEventListener('keydown', e => {
+    if (e.key === 'Enter') login();
+  });
+
+  async function login() {
+    loginError.textContent = '';
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      loginError.textContent = error.message;
+      return;
+    }
+    enterDashboard();
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    location.reload();
+  });
+
+  async function checkSession() {
+    const { data } = await supabase.auth.getSession();
+    if (data.session) enterDashboard();
+  }
+  checkSession();
+
+  // ---------- DASHBOARD ----------
+  async function enterDashboard() {
+    loginScreen.style.display = 'none';
+    dashboard.style.display = 'block';
+    await loadInitialData();
+    subscribeRealtime();
+  }
+
+  async function loadInitialData() {
+    const { data: contactData } = await supabase
+      .from('contacts')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(50);
+    contacts = contactData || [];
+
+    const { data: auditData } = await supabase
+      .from('audit_responses')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(50);
+    audits = auditData || [];
+
+    renderContacts();
+    renderAudits();
+    updateSummary();
+    document.getElementById('statusText').textContent = 'Live';
+  }
+
+  function subscribeRealtime() {
+    supabase
+      .channel('admin-dashboard')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'contacts' }, payload => {
+        contacts.unshift(payload.new);
+        renderContacts(payload.new.id);
+        updateSummary();
+      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'audit_responses' }, payload => {
+        audits.unshift(payload.new);
+        renderAudits(payload.new.id);
+        updateSummary();
+      })
+      .subscribe(status => {
+        document.getElementById('statusText').textContent =
+          status === 'SUBSCRIBED' ? 'Live' : status;
+      });
+  }
+
+  function formatTime(iso) {
+    const d = new Date(iso);
+    return d.toLocaleString(undefined, {
+      month: 'short', day: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+  }
+
+  function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function renderContacts(highlightId) {
+    const tbody = document.getElementById('contactsBody');
+    if (!contacts.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">No submissions yet.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = contacts.map(c => `
+      <tr class="${c.id === highlightId ? 'new-row' : ''}">
+        <td>${escapeHtml(c.name)}</td>
+        <td>${escapeHtml(c.email)}</td>
+        <td>${escapeHtml(c.phone)}</td>
+        <td class="msg-cell">${escapeHtml(c.message)}</td>
+        <td class="time-cell">${formatTime(c.created_at)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function scoreClass(score) {
+    if (score >= 75) return 'score-good';
+    if (score >= 50) return 'score-mid';
+    return 'score-low';
+  }
+
+  function renderAudits(highlightId) {
+    const tbody = document.getElementById('auditBody');
+    if (!audits.length) {
+      tbody.innerHTML = '<tr><td colspan="4" class="empty-msg">No audit responses yet.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = audits.map(a => `
+      <tr class="${a.id === highlightId ? 'new-row' : ''}">
+        <td>${escapeHtml(a.email) || '<em>anonymous</em>'}</td>
+        <td><span class="score-pill ${scoreClass(a.score)}">${a.score}</span></td>
+        <td>${escapeHtml(a.assessment)}</td>
+        <td class="time-cell">${formatTime(a.created_at)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function updateSummary() {
+    document.getElementById('contactCount').textContent = contacts.length;
+    document.getElementById('auditCount').textContent = audits.length;
+    if (audits.length) {
+      const avg = audits.reduce((sum, a) => sum + Number(a.score || 0), 0) / audits.length;
+      document.getElementById('avgScore').textContent = avg.toFixed(1);
+    }
+  }
+</script>
+</body>
+</html>
