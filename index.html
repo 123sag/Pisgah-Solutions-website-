@@ -1989,6 +1989,68 @@
 
 
 </script>
+<script src="https://kcgnhwfedkmptstfntsd.supabase.co"></script>
+
+<script>
+  // Replace these placeholders with your actual keys from Step 2
+  const SUPABASE_URL = 'https://kcgnhwfedkmptstfntsd.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjZ25od2ZlZGttcHRzdGZudHNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU4NDg1NzIsImV4cCI6MjEwMTQyNDU3Mn0.s3GzHKqvVf4TZb5j6wLU8I_EoeWAuXzQIF4Ywe_AhDs';
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // 1. Handle Contact Form Submission
+  document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    
+    submitBtn.disabled = true;
+    submitBtn.innerText = 'Sending...';
+
+    const { error } = await supabase.from('contacts').insert({
+      name: form.name.value,
+      email: form.email.value,
+      phone: form.phone.value,
+      message: form.message.value
+    });
+
+    submitBtn.disabled = false;
+    submitBtn.innerText = 'Send Message';
+
+    if (error) {
+      alert('Something went wrong, please try again.');
+      console.error(error);
+      return;
+    }
+
+    alert('Thank you! Your message has been sent successfully.');
+    form.reset();
+  });
+
+  // 2. Handle Security Audit Form Submission
+  document.getElementById('auditForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    
+    const { error } = await supabase.from('audits').insert({
+      company_name: form.company?.value || '',
+      contact_person: form.name?.value || '',
+      email: form.email?.value || '',
+      phone: form.phone?.value || '',
+      facility_type: form.facility?.value || '',
+      score: window.latestAuditScore || null
+    });
+
+    if (error) {
+      alert('Failed to submit assessment.');
+      console.error(error);
+      return;
+    }
+
+    alert('Audit request submitted successfully!');
+    form.reset();
+  });
+</script>
 
 </body>
 </html>
