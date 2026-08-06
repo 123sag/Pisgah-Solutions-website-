@@ -1880,40 +1880,77 @@
     });
   });
 </script>
-
-<script src="https://caplxokxwkmownahqphg.supabase.co"></script>
 <script>
+  // Initialize Supabase Client
   const SUPABASE_URL = 'https://caplxokxwkmownahqphg.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNhcGx4b2t4d2ttb3duYWhxcGhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTc0ODQsImV4cCI6MjEwMTU5MzQ4NH0.dzqKIjTX6Z8UCQ1KArm9O_Q6kf_mad5u8PvlgCfSnTY';
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // --- 1. Handle Contact Form Submission ---
+  document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.querySelector('.contact-form-box form');
+    if (contactForm) {
+      contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = {
+          name: contactForm.querySelector('input[placeholder*="Name"]')?.value || '',
+          email: contactForm.querySelector('input[type="email"]')?.value || '',
+          phone: contactForm.querySelector('input[type="tel"]')?.value || '',
+          message: contactForm.querySelector('textarea')?.value || ''
+        };
 
-  document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const submitBtn = form.querySelector('button[type="submit"]');
+        const { data, error } = await supabaseClient
+          .from('form_submissions')
+          .insert([formData]);
 
-    submitBtn.disabled = true;
-    submitBtn.innerText = 'Sending...';
-
-    const { error } = await window.supabaseClient.from('contacts').insert({
-      name: form.name.value,
-      email: form.email.value,
-      phone: form.phone.value,
-      message: form.message.value
-    });
-
-    submitBtn.disabled = false;
-    submitBtn.innerText = 'Send Message';
-
-    if (error) {
-      alert('Something went wrong, please try again.');
-      console.error(error);
-      return;
+        if (error) {
+          alert('Error submitting form: ' + error.message);
+        } else {
+          alert('Thank you! Your message has been sent successfully.');
+          contactForm.reset();
+        }
+      });
     }
 
-    alert('Thank you! Your message has been sent successfully.');
-    form.reset();
+    // --- 2. Handle Interactive Security Audit Submission ---
+    // Assuming you capture the audit results when the user completes the wizard modal
+    window.saveAuditResult = async function(score, statusLabel, userDetails) {
+      const { data, error } = await supabaseClient
+        .from('security_audits')
+        .insert([{
+          company_name: userDetails.company || 'Anonymous',
+          email: userDetails.email || '',
+          score: score,
+          status_label: statusLabel,
+          responses: userDetails.responses || {}
+        }]);
+
+      if (error) {
+        console.error('Error saving audit:', error);
+      } else {
+        console.log('Audit saved successfully!');
+      }
+    };
+
+    // --- 3. Real-Time Listeners (Live Updates) ---
+    // Listen for incoming form submissions in real-time
+    supabaseClient
+      .channel('public:form_submissions')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'form_submissions' }, payload => {
+        console.log('New real-time form submission received:', payload.new);
+        // You can update a live dashboard UI here if needed
+      })
+      .subscribe();
+
+    // Listen for incoming security audits in real-time
+    supabaseClient
+      .channel('public:security_audits')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'security_audits' }, payload => {
+        console.log('New real-time security audit completed:', payload.new);
+        // Trigger live notifications or update visual metrics here
+      })
+      .subscribe();
   });
 </script>
 </body>
