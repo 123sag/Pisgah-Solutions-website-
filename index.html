@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -814,6 +814,279 @@
       font-size:1.5rem;
     }
   }
+
+  /* LANGUAGE SWITCHER */
+  .language-switcher{
+    position:absolute;
+    right:20px;
+    top:50%;
+    transform:translateY(-50%);
+    display:flex;
+    gap:8px;
+    background:rgba(255,255,255,0.95);
+    padding:6px 10px;
+    border-radius:999px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  }
+  :root.dark-mode .language-switcher{
+    background:rgba(45,45,45,0.95);
+  }
+  .lang-btn{
+    padding:6px 12px;
+    border:none;
+    background:transparent;
+    color:var(--ink-soft);
+    font-weight:600;
+    font-size:0.8rem;
+    cursor:pointer;
+    border-radius:999px;
+    transition:all 0.3s ease;
+  }
+  .lang-btn.active{
+    background:var(--purple-600);
+    color:#fff;
+  }
+  .lang-btn:hover{
+    color:var(--purple-600);
+  }
+
+  /* VIDEO HERO */
+  .hero-video-container{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    z-index:0;
+  }
+  .hero-video-container video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0.3;
+  }
+  .hero-overlay{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:linear-gradient(135deg, rgba(126,34,206,0.4), rgba(192,38,211,0.3));
+    z-index:1;
+  }
+
+  /* TEAM SECTION */
+  .team-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:30px;
+    margin-top:40px;
+  }
+  .team-card{
+    background:#fff;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    animation:fadeInUp 0.8s ease-out;
+    transition:all 0.3s ease;
+    text-align:center;
+  }
+  .team-card:nth-child(1) { animation-delay: 0s; }
+  .team-card:nth-child(2) { animation-delay: 0.1s; }
+  .team-card:nth-child(3) { animation-delay: 0.2s; }
+  .team-card:nth-child(4) { animation-delay: 0.3s; }
+  :root.dark-mode .team-card{
+    background:#2D2D2D;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+  }
+  .team-card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 20px 50px rgba(126,34,206,0.25);
+  }
+  :root.dark-mode .team-card:hover{
+    box-shadow:0 20px 50px rgba(126,34,206,0.4);
+  }
+  .team-image{
+    width:100%;
+    height:250px;
+    background:linear-gradient(135deg, var(--purple-600), var(--purple-500));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:80px;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+  }
+  .team-image::after{
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+    animation:shimmer 3s infinite;
+  }
+  @keyframes shimmer{
+    0% { transform:translateX(-100%); }
+    100% { transform:translateX(100%); }
+  }
+  .team-info{
+    padding:24px 16px;
+  }
+  .team-name{
+    font-size:1.1rem;
+    font-weight:700;
+    color:var(--ink);
+    margin-bottom:4px;
+    font-family:var(--font-head);
+  }
+  :root.dark-mode .team-name{
+    color:#F0F0F0;
+  }
+  .team-role{
+    font-size:0.85rem;
+    color:var(--purple-600);
+    font-weight:600;
+    margin-bottom:12px;
+  }
+  :root.dark-mode .team-role{
+    color:#A855F7;
+  }
+  .team-bio{
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    line-height:1.5;
+  }
+  :root.dark-mode .team-bio{
+    color:#B0B0B0;
+  }
+
+  /* INSIGHTS/BLOG SECTION */
+  .insights-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:30px;
+    margin-top:40px;
+  }
+  .insight-card{
+    background:#fff;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    animation:fadeInUp 0.8s ease-out;
+    transition:all 0.3s ease;
+    cursor:pointer;
+  }
+  .insight-card:nth-child(1) { animation-delay: 0s; }
+  .insight-card:nth-child(2) { animation-delay: 0.1s; }
+  .insight-card:nth-child(3) { animation-delay: 0.2s; }
+  :root.dark-mode .insight-card{
+    background:#2D2D2D;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+  }
+  .insight-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 20px 50px rgba(126,34,206,0.25);
+  }
+  :root.dark-mode .insight-card:hover{
+    box-shadow:0 20px 50px rgba(126,34,206,0.4);
+  }
+  .insight-image{
+    width:100%;
+    height:200px;
+    background:linear-gradient(135deg, var(--purple-500), var(--pink-500));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:60px;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+  }
+  .insight-image::after{
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+    animation:shimmer 3s infinite;
+  }
+  .insight-content{
+    padding:24px;
+  }
+  .insight-date{
+    font-size:0.75rem;
+    color:var(--purple-600);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:8px;
+  }
+  :root.dark-mode .insight-date{
+    color:#A855F7;
+  }
+  .insight-title{
+    font-size:1.1rem;
+    font-weight:700;
+    color:var(--ink);
+    margin-bottom:10px;
+    font-family:var(--font-head);
+    line-height:1.4;
+  }
+  :root.dark-mode .insight-title{
+    color:#F0F0F0;
+  }
+  .insight-excerpt{
+    font-size:0.9rem;
+    color:var(--ink-soft);
+    line-height:1.6;
+    margin-bottom:16px;
+  }
+  :root.dark-mode .insight-excerpt{
+    color:#B0B0B0;
+  }
+  .insight-link{
+    display:inline-block;
+    color:var(--purple-600);
+    font-weight:600;
+    font-size:0.9rem;
+    text-decoration:none;
+    transition:all 0.3s ease;
+  }
+  :root.dark-mode .insight-link{
+    color:#A855F7;
+  }
+  .insight-link:hover{
+    color:var(--purple-700);
+    transform:translateX(4px);
+  }
+  :root.dark-mode .insight-link:hover{
+    color:#C084FC;
+  }
+
+  @media (max-width:768px){
+    .team-grid{
+      grid-template-columns:repeat(2,1fr);
+    }
+    .insights-grid{
+      grid-template-columns:1fr;
+    }
+    .language-switcher{
+      position:static;
+      transform:none;
+      margin-top:10px;
+    }
+  }
+  @media (max-width:480px){
+    .team-grid{
+      grid-template-columns:1fr;
+    }
+  }
   footer .fbottom{
     border-top:1px solid rgba(255,255,255,0.12);
     padding-top:18px;
@@ -999,248 +1272,8 @@
     width:0%;
     transition: width 0.3s ease;
   }
-
-  /* --- NEW FEATURES CSS --- */
-  
-  /* HERO VIDEO */
-  .hero {
-    position: relative;
-    overflow: hidden;
-    min-height: 85vh;
-    display: flex;
-    align-items: center;
-    background: #000;
-    padding: 120px 0 80px;
-  }
-  .hero-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 1;
-    opacity: 0.5;
-  }
-  .hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(59, 15, 92, 0.85) 0%, rgba(192, 38, 211, 0.3) 100%);
-    z-index: 2;
-  }
-  .hero-grid {
-    position: relative;
-    z-index: 3;
-  }
-
-  /* LANGUAGE SWITCHER */
-  .lang-switcher {
-    margin-right: 15px;
-  }
-  .lang-switcher select {
-    background: var(--bg-soft);
-    border: 1px solid var(--border-soft);
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-family: var(--font-head);
-    font-weight: 600;
-    font-size: 0.85rem;
-    cursor: pointer;
-    color: var(--purple-700);
-    outline: none;
-    transition: all 0.3s ease;
-  }
-  :root.dark-mode .lang-switcher select {
-    background: #3D3D3D;
-    color: #A855F7;
-    border-color: #4D4D4D;
-  }
-
-  /* INSIGHTS (BLOG) */
-  .insights-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-  }
-  .insight-card {
-    background: var(--bg-white);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid var(--border-soft);
-  }
-  .insight-card:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 25px 50px rgba(126, 34, 206, 0.15);
-  }
-  .insight-img {
-    height: 220px;
-    overflow: hidden;
-  }
-  .insight-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-  }
-  .insight-card:hover .insight-img img {
-    transform: scale(1.15);
-  }
-  .insight-content {
-    padding: 28px;
-  }
-  .insight-tag {
-    display: inline-block;
-    padding: 5px 14px;
-    background: rgba(126, 34, 206, 0.1);
-    color: var(--purple-600);
-    border-radius: 99px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .insight-content h3 {
-    font-size: 1.25rem;
-    margin-bottom: 12px;
-    line-height: 1.4;
-    color: var(--purple-900);
-  }
-  .insight-content p {
-    color: var(--ink-soft);
-    font-size: 0.92rem;
-    margin-bottom: 22px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .insight-link {
-    color: var(--purple-600);
-    font-weight: 700;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: gap 0.3s ease;
-  }
-  .insight-link:hover {
-    gap: 12px;
-  }
-
-  /* TEAM SPOTLIGHT */
-  .team-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 28px;
-  }
-  .team-card {
-    text-align: center;
-    background: var(--bg-white);
-    padding: 35px 25px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border-soft);
-    box-shadow: var(--shadow);
-    transition: all 0.3s ease;
-  }
-  .team-card:hover {
-    transform: translateY(-8px);
-    border-color: var(--purple-400);
-    box-shadow: 0 15px 35px rgba(126, 34, 206, 0.12);
-  }
-  .team-img {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    margin: 0 auto 22px;
-    overflow: hidden;
-    border: 4px solid var(--purple-100);
-    transition: border-color 0.3s ease;
-  }
-  .team-card:hover .team-img {
-    border-color: var(--purple-400);
-  }
-  .team-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .team-card h3 {
-    font-size: 1.15rem;
-    margin-bottom: 6px;
-    color: var(--purple-900);
-  }
-  .team-card .role {
-    color: var(--purple-600);
-    font-weight: 700;
-    font-size: 0.88rem;
-    margin-bottom: 18px;
-    display: block;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .team-card p {
-    font-size: 0.88rem;
-    color: var(--ink-soft);
-    line-height: 1.6;
-  }
-
-  @media (max-width: 992px) {
-    .insights-grid, .team-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  @media (max-width: 600px) {
-    .insights-grid, .team-grid {
-      grid-template-columns: 1fr;
-    }
-    .hero {
-      min-height: 70vh;
-    }
-  }
-
-  /* --- EFFECTIVENESS FEATURES --- */
-  
-  /* WhatsApp Floating Button */
-  .whatsapp-float {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 60px;
-    height: 60px;
-    background-color: #25d366;
-    color: #FFF;
-    border-radius: 50px;
-    text-align: center;
-    font-size: 30px;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-  }
-  .whatsapp-float:hover {
-    transform: scale(1.1);
-    background-color: #128c7e;
-  }
-
-  /* Sticky Quick Quote Button */
-  .sticky-quote {
-    position: fixed;
-    bottom: 30px;
-    left: 30px;
-    z-index: 1000;
-    animation: fadeInUp 1s ease-out;
-  }
-
-
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -1261,35 +1294,27 @@
       </ul>
     </nav>
     <div class="nav-cta">
-      <div class="lang-switcher">
-        <select id="langSelect" aria-label="Select Language">
-          <option value="en">EN</option>
-          <option value="kn">KN</option>
-          <option value="hi">HI</option>
-        </select>
+      <div class="language-switcher" id="langSwitcher">
+        <button class="lang-btn active" onclick="switchLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="switchLanguage('kn')">ಕನ್ನಡ</button>
+        <button class="lang-btn" onclick="switchLanguage('hi')">हिन्दी</button>
       </div>
       <button class="dark-mode-toggle" id="darkModeBtn" onclick="toggleDarkMode()" title="Toggle Dark Mode"></button>
-      <a href="#audit" class="btn btn-solid" style="padding:11px 22px; font-size:0.85rem;" data-i18n="nav-audit">Request Audit</a>
+      <a href="#audit" class="btn btn-solid" style="padding:11px 22px; font-size:0.85rem;">Request Audit</a>
       <div class="burger" onclick="document.querySelector('nav').classList.toggle('open')"><span></span><span></span><span></span></div>
     </div>
   </div>
 </header>
 
 <section class="hero" id="top">
-  <video class="hero-video" autoplay muted loop playsinline>
-    <source src="https://assets.mixkit.co/videos/preview/mixkit-security-guard-walking-in-a-parking-lot-40032-large.mp4" type="video/mp4">
-    <!-- Fallback for browsers that don't support video -->
-    Your browser does not support the video tag.
-  </video>
-  <div class="hero-overlay"></div>
   <div class="container hero-grid">
     <div>
       <span class="eyebrow"></span>
-      <h1 data-i18n="hero-title">Securing Your Future, Managing Your Environment.</h1>
-      <p data-i18n="hero-desc">Integrated Security & Facility Management Solutions. Protection You Can Count On. Service You Can Trust.</p>
+      <h1>Securing Your Future, Managing Your Environment.</h1>
+      <p>Integrated Security & Facility Management Solutions. Protection You Can Count On. Service You Can Trust.</p>
       <div class="hero-actions">
-        <a href="#audit" class="btn btn-solid" data-i18n="hero-cta-audit">Request Security Audit</a>
-        <a href="#services" class="btn btn-outline" data-i18n="hero-cta-services">Discover Services</a>
+        <a href="#audit" class="btn btn-solid">Request Security Audit</a>
+        <a href="#services" class="btn btn-outline">Discover Services</a>
       </div>
     </div>
     <div class="hero-img">
@@ -1297,8 +1322,6 @@
     </div>
   </div>
 </section>
-
-
 
 <section class="section" id="about">
   <div class="container">
@@ -1463,54 +1486,6 @@
   </div>
 </section>
 
-<section class="section soft" id="insights">
-  <div class="container">
-    <span class="eyebrow"></span>
-    <h2 class="section-title" data-i18n="insights-title">Insights & Industry News</h2>
-    <p class="section-sub" data-i18n="insights-sub">Stay updated with the latest security tips and facility management trends.</p>
-    <div class="insights-grid">
-      <!-- Blog Post 1 -->
-      <div class="insight-card">
-        <div class="insight-img">
-          <img src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=800&q=80" alt="Security Tips">
-        </div>
-        <div class="insight-content">
-          <span class="insight-tag">Security</span>
-          <h3 data-i18n="blog1-title">5 Essential Security Tips for Gated Communities</h3>
-          <p data-i18n="blog1-desc">Discover how to enhance the safety of your residential society with these proven security measures and technology integrations.</p>
-          <a href="#" class="insight-link" data-i18n="read-more">Read Full Article <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
-        </div>
-      </div>
-      <!-- Blog Post 2 -->
-      <div class="insight-card">
-        <div class="insight-img">
-          <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800&q=80" alt="Facility Management">
-        </div>
-        <div class="insight-content">
-          <span class="insight-tag">Management</span>
-          <h3 data-i18n="blog2-title">The Future of Smart Facility Management</h3>
-          <p data-i18n="blog2-desc">Explore how AI and IoT are transforming facility management, making buildings more efficient and comfortable for occupants.</p>
-          <a href="#" class="insight-link" data-i18n="read-more">Read Full Article <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
-        </div>
-      </div>
-      <!-- Blog Post 3 -->
-      <div class="insight-card">
-        <div class="insight-img">
-          <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80" alt="Workplace Safety">
-        </div>
-        <div class="insight-content">
-          <span class="insight-tag">Safety</span>
-          <h3 data-i18n="blog3-title">Workplace Safety in the Post-Pandemic Era</h3>
-          <p data-i18n="blog3-desc">A comprehensive guide to maintaining health and safety standards in corporate offices and commercial spaces today.</p>
-          <a href="#" class="insight-link" data-i18n="read-more">Read Full Article <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
 <section class="section soft" id="testimonials">
   <div class="container">
     <span class="eyebrow"></span>
@@ -1574,7 +1549,7 @@
     <h2 class="section-title">Schedule a Security Audit</h2>
     <p class="section-sub" style="margin-left:auto; margin-right:auto;">Book your free security assessment with our expert team.</p>
     <div class="audit-card" style="text-align:left;">
-      <form onsubmit="event.preventDefault(); alert('Thanks! Our team will reach out to confirm your audit.');">
+      <form id="auditForm">
         <div class="form-row">
           <input type="text" placeholder="Your Name" required>
           <input type="email" placeholder="Your Email" required>
@@ -1611,7 +1586,7 @@
         <h3>Send us a Message</h3>
         <p>Fill out the form below and our team will get back to you shortly.</p>
         
-        <form onsubmit="event.preventDefault(); alert('Thank you! Your message has been sent. We will contact you soon.'); this.reset();">
+        <form id="contactForm">
           <div class="contact-form-group">
             <label for="name">Your Name:</label>
             <input type="text" id="name" name="name" placeholder="Enter your full name" required>
@@ -1679,17 +1654,6 @@
   <div class="fbottom">© 2026 Pisgah Solutions Pvt Ltd. All rights reserved.</div>
 </footer>
 
-<!-- FLOATING ELEMENTS -->
-<a href="https://wa.me/917975565005" class="whatsapp-float" target="_blank" title="Chat with us on WhatsApp">
-  <svg width="35" height="35" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.038 3.284l-.569 2.1c-.123.454.28.855.733.732l2.131-.577c.958.57 2.044.909 3.221.909 3.181 0 5.767-2.586 5.768-5.766.001-3.187-2.575-5.748-5.754-5.748zm3.716 7.998c-.147.416-.735.762-1.017.81-.282.048-.63.074-1.613-.31-1.17-.457-1.932-1.632-1.991-1.712-.058-.079-.477-.633-.477-1.21s.302-.861.41-.979c.108-.118.235-.147.314-.147s.157 0 .225.005c.074.005.172-.029.269.206.103.245.353.862.383.923.03.06.05.131.01.211s-.06.131-.12.201c-.06.071-.125.158-.18.214-.059.059-.121.124-.053.241.069.117.306.505.657.817.452.403.832.528.95.587s.216.04.295-.05c.08-.09.339-.393.43-.527.09-.134.181-.113.305-.067s.789.372.926.441c.137.069.228.103.262.16.035.058.035.334-.112.75zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.662 1.435 5.179l-1.33 4.912c-.105.389.255.748.643.643l4.912-1.33C9.17 22.31 10.74 23 12.42 23c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 19c-1.467 0-2.836-.407-4.004-1.111l-.288-.173-2.971.805.805-2.971-.173-.288A7.953 7.953 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z"/></svg>
-</a>
-
-<div class="sticky-quote">
-  <a href="#audit" class="btn btn-solid" style="padding:15px 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">Get Quick Quote</a>
-</div>
-
-
-
 <script>
   document.querySelectorAll('.faq-item').forEach(item => {
     item.querySelector('.faq-q').addEventListener('click', () => {
@@ -1733,80 +1697,6 @@
     if (localStorage.getItem('darkMode') === 'true') {
       document.documentElement.classList.add('dark-mode');
     }
-    
-    // Initialize language
-    const savedLang = localStorage.getItem('selectedLang') || 'en';
-    document.getElementById('langSelect').value = savedLang;
-    updateLanguage(savedLang);
-  });
-
-  // Language Switcher Logic
-  const translations = {
-    en: {
-      "nav-audit": "Free Security Audit",
-      "hero-title": "Securing Your Future, Managing Your Environment.",
-      "hero-desc": "Integrated Security & Facility Management Solutions. Protection You Can Count On. Service You Can Trust.",
-      "hero-cta-audit": "Request Security Audit",
-      "hero-cta-services": "Discover Services",
-      "insights-title": "Insights & Industry News",
-      "insights-sub": "Stay updated with the latest security tips and facility management trends.",
-      "blog1-title": "5 Essential Security Tips for Gated Communities",
-      "blog1-desc": "Discover how to enhance the safety of your residential society with these proven security measures and technology integrations.",
-      "blog2-title": "The Future of Smart Facility Management",
-      "blog2-desc": "Explore how AI and IoT are transforming facility management, making buildings more efficient and comfortable for occupants.",
-      "blog3-title": "Workplace Safety in the Post-Pandemic Era",
-      "blog3-desc": "A comprehensive guide to maintaining health and safety standards in corporate offices and commercial spaces today.",
-
-      "read-more": "Read Full Article"
-    },
-    kn: {
-      "nav-audit": "ಉಚಿತ ಭದ್ರತಾ ತಪಾಸಣೆ",
-      "hero-title": "ನಿಮ್ಮ ಭವಿಷ್ಯವನ್ನು ಭದ್ರಪಡಿಸುವುದು, ನಿಮ್ಮ ಪರಿಸರವನ್ನು ನಿರ್ವಹಿಸುವುದು.",
-      "hero-desc": "ಸಮಗ್ರ ಭದ್ರತೆ ಮತ್ತು ಸೌಲಭ್ಯ ನಿರ್ವಹಣಾ ಪರಿಹಾರಗಳು. ನೀವು ನಂಬಬಹುದಾದ ರಕ್ಷಣೆ. ನೀವು ನಂಬಬಹುದಾದ ಸೇವೆ.",
-      "hero-cta-audit": "ಭದ್ರತಾ ತಪಾಸಣೆಗೆ ವಿನಂತಿಸಿ",
-      "hero-cta-services": "ಸೇವೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ",
-      "insights-title": "ಒಳನೋಟಗಳು ಮತ್ತು ಉದ್ಯಮದ ಸುದ್ದಿ",
-      "insights-sub": "ಇತ್ತೀಚಿನ ಭದ್ರತಾ ಸಲಹೆಗಳು ಮತ್ತು ಸೌಲಭ್ಯ ನಿರ್ವಹಣಾ ಪ್ರವೃತ್ತಿಗಳೊಂದಿಗೆ ನವೀಕೃತವಾಗಿರಿ.",
-      "blog1-title": "ಗೇಟೆಡ್ ಸಮುದಾಯಗಳಿಗೆ 5 ಅಗತ್ಯ ಭದ್ರತಾ ಸಲಹೆಗಳು",
-      "blog1-desc": "ನಿಮ್ಮ ವಸತಿ ಸಂಘದ ಸುರಕ್ಷತೆಯನ್ನು ಹೆಚ್ಚಿಸಲು ಈ ಸಾಬೀತಾದ ಭದ್ರತಾ ಕ್ರಮಗಳು ಮತ್ತು ತಂತ್ರಜ್ಞಾನ ಏಕೀಕರಣಗಳನ್ನು ಅನ್ವೇಷಿಸಿ.",
-      "blog2-title": "ಸ್ಮಾರ್ಟ್ ಸೌಲಭ್ಯ ನಿರ್ವಹಣೆಯ ಭವಿಷ್ಯ",
-      "blog2-desc": "AI ಮತ್ತು IoT ಸೌಲಭ್ಯ ನಿರ್ವಹಣೆಯನ್ನು ಹೇಗೆ ಬದಲಾಯಿಸುತ್ತಿವೆ ಎಂಬುದನ್ನು ಅನ್ವೇಷಿಸಿ.",
-      "blog3-title": "ಸಾಂಕ್ರಾಮಿಕ ನಂತರದ ಯುಗದಲ್ಲಿ ಕೆಲಸದ ಸ್ಥಳದ ಸುರಕ್ಷತೆ",
-      "blog3-desc": "ಕಾರ್ಪೊರೇಟ್ ಕಚೇರಿಗಳಲ್ಲಿ ಆರೋಗ್ಯ ಮತ್ತು ಸುರಕ್ಷತಾ ಮಾನದಂಡಗಳನ್ನು ಕಾಪಾಡಿಕೊಳ್ಳಲು ಸಮಗ್ರ ಮಾರ್ಗದರ್ಶಿ.",
-
-      "read-more": "ಪೂರ್ಣ ಲೇಖನವನ್ನು ಓದಿ"
-    },
-    hi: {
-      "nav-audit": "मुफ्त सुरक्षा ऑडिट",
-      "hero-title": "आपके भविष्य को सुरक्षित करना, आपके पर्यावरण का प्रबंधन करना।",
-      "hero-desc": "एकीकृत सुरक्षा और सुविधा प्रबंधन समाधान। वह सुरक्षा जिस पर आप भरोसा कर सकें। वह सेवा जिस पर आप विश्वास कर सकें।",
-      "hero-cta-audit": "सुरक्षा ऑडिट का अनुरोध करें",
-      "hero-cta-services": "सेवाओं की खोज करें",
-      "insights-title": "अंतर्दृष्टि और उद्योग समाचार",
-      "insights-sub": "नवीनतम सुरक्षा युक्तियों और सुविधा प्रबंधन रुझानों के साथ अपडेट रहें।",
-      "blog1-title": "गेटेड समुदायों के लिए 5 आवश्यक सुरक्षा युक्तियाँ",
-      "blog1-desc": "इन सिद्ध सुरक्षा उपायों और प्रौद्योगिकी एकीकरण के साथ अपनी आवासीय सोसायटी की सुरक्षा बढ़ाने का तरीका जानें।",
-      "blog2-title": "स्मार्ट सुविधा प्रबंधन का भविष्य",
-      "blog2-desc": "अन्वेषण करें कि एआई और आईओटी सुविधा प्रबंधन को कैसे बदल रहे हैं।",
-      "blog3-title": "महामारी के बाद के युग में कार्यस्थल सुरक्षा",
-      "blog3-desc": "कॉर्पोरेट कार्यालयों में स्वास्थ्य और सुरक्षा मानकों को बनाए रखने के लिए एक व्यापक मार्गदर्शिका।",
-
-      "read-more": "पूरा लेख पढ़ें"
-    }
-  };
-
-  function updateLanguage(lang) {
-    document.querySelectorAll('[data-i18n]').forEach(element => {
-      const key = element.getAttribute('data-i18n');
-      if (translations[lang] && translations[lang][key]) {
-        element.textContent = translations[lang][key];
-      }
-    });
-    localStorage.setItem('selectedLang', lang);
-  }
-
-  document.getElementById('langSelect').addEventListener('change', (e) => {
-    updateLanguage(e.target.value);
   });
   
   // Security Audit Questions
@@ -1943,7 +1833,18 @@
       <p>${recommendation}</p>
       <p style="margin-top:20px; font-size:0.9rem;">Ready to strengthen your security? Let\'s connect!</p>
     `;
-    
+
+    window.latestAuditScore = Math.round(avgScore);
+    if (window.supabaseClient) {
+      window.supabaseClient.from('audit_responses').insert({
+        score: avgScore,
+        assessment: assessment,
+        answers: scores
+      }).then(({ error }) => {
+        if (error) console.error('Failed to save audit response:', error);
+      });
+    }
+
     buttonGroup.innerHTML = `
       <button class="audit-btn-next" onclick="requestConsultation()">Request Consultation</button>
       <button class="audit-btn-reset" onclick="resetAudit()">Retake Assessment</button>
@@ -1977,88 +1878,74 @@
         openAuditModal();
       });
     });
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // Initialize Supabase Client
+  const SUPABASE_URL = 'https://bzixawbxdcppskzpkmvi.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_0A5Mh5o-xg6uMtfFVaej_g_k-PopveQ';
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Lazy load images for performance
-    const images = document.querySelectorAll('img');
-    if ('loading' in HTMLImageElement.prototype) {
-      images.forEach(img => {
-        img.loading = 'lazy';
+  document.addEventListener('DOMContentLoaded', () => {
+
+    // --- 1. Contact Form Handler ---
+const contactForm = document.querySelector('.contact-form-box form');
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Get all input tags inside the form in order
+    const inputs = contactForm.querySelectorAll('input');
+    
+    const formData = {
+      name: inputs[0] ? inputs[0].value.trim() : '',   // First input field (Name)
+      email: contactForm.querySelector('input[type="email"]')?.value || '',
+      phone: contactForm.querySelector('input[type="tel"]')?.value || '',
+      message: contactForm.querySelector('textarea')?.value || ''
+    };
+
+    const { error } = await supabaseClient
+      .from('form_submissions')
+      .insert([formData]);
+
+    if (error) {
+      alert('Error submitting message: ' + error.message);
+    } else {
+      alert('Thank you! Your message has been sent successfully.');
+      contactForm.reset();
+    }
+  });
+}
+
+    // --- 2. Audit Form Handler ---
+    const auditForm = document.getElementById('auditForm');
+    if (auditForm) {
+      auditForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const auditData = {
+          name: auditForm.querySelector('input[placeholder*="Name"]')?.value || '',
+          email: auditForm.querySelector('input[type="email"]')?.value || '',
+          service: auditForm.querySelector('select')?.value || '',
+          preferred_date: auditForm.querySelector('input[type="date"]')?.value || '',
+          preferred_time: auditForm.querySelector('input[type="time"]')?.value || ''
+        };
+
+        const { error } = await supabaseClient
+          .from('scheduled_audits')
+          .insert([auditData]);
+
+        if (error) {
+          alert('Error scheduling audit: ' + error.message);
+        } else {
+          alert('Thanks! Our team will reach out to confirm your audit.');
+          auditForm.reset();
+        }
       });
     }
-  });
 
-
-</script>
-<script src="https://kcgnhwfedkmptstfntsd.supabase.co"></script>
-
-<script>
-  // Replace these placeholders with your actual keys from Step 2
-  const SUPABASE_URL = 'https://kcgnhwfedkmptstfntsd.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjZ25od2ZlZGttcHRzdGZudHNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU4NDg1NzIsImV4cCI6MjEwMTQyNDU3Mn0.s3GzHKqvVf4TZb5j6wLU8I_EoeWAuXzQIF4Ywe_AhDs';
-
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // 1. Handle Contact Form Submission
-  document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const submitBtn = form.querySelector('button[type="submit"]');
-    
-    submitBtn.disabled = true;
-    submitBtn.innerText = 'Sending...';
-
-    const { error } = await supabase.from('contacts').insert({
-      name: form.name.value,
-      email: form.email.value,
-      phone: form.phone.value,
-      message: form.message.value
-    });
-
-    submitBtn.disabled = false;
-    submitBtn.innerText = 'Send Message';
-
-    if (error) {
-      alert('Something went wrong, please try again.');
-      console.error(error);
-      return;
-    }
-
-    alert('Thank you! Your message has been sent successfully.');
-    form.reset();
-  });
-
-  // 2. Handle Security Audit Form Submission
-  document.getElementById('auditForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    
-    const { error } = await supabase.from('audits').insert({
-      company_name: form.company?.value || '',
-      contact_person: form.name?.value || '',
-      email: form.email?.value || '',
-      phone: form.phone?.value || '',
-      facility_type: form.facility?.value || '',
-      score: window.latestAuditScore || null
-    });
-
-    if (error) {
-      alert('Failed to submit assessment.');
-      console.error(error);
-      return;
-    }
-
-    alert('Audit request submitted successfully!');
-    form.reset();
   });
 </script>
-  <form id="contactForm">
-  <input type="text" name="name" required placeholder="Your Name" />
-  <input type="email" name="email" required placeholder="Your Email" />
-  <input type="tel" name="phone" placeholder="Phone Number" />
-  <textarea name="message" required placeholder="Your Message"></textarea>
-  
-  <button type="submit">Send Message</button>
-</form>
-
 </body>
 </html>
